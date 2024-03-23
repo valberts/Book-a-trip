@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from flask import Blueprint
+from flask import Blueprint, jsonify
 import pymysql
 
 user = Blueprint('user', __name__)
@@ -15,14 +15,15 @@ CREATE TABLE IF NOT EXISTS UserInfo(
 '''
 
 @user.route('/userInfo/<username>')
-def searchUser():
+def searchUser(username):
     cursor = db.cursor()
     cursor.execute(userTableCreateSql)
-    sql = 'select * from UserInfo where nickname = ' + username
+    sql = "select * from UserInfo where nickname = '" + username +"'"
     cursor.execute(sql)
     results = cursor.fetchall()
     print(results)
-    return results
+
+    return jsonify(results)
 
 
 @user.route('/get/')
