@@ -2,6 +2,18 @@
 
 ### Front-end Structure
 
+For the frontend we use Next.js and Tailwind CSS.
+
+## Running
+
+Install the packages.
+
+`npm install`
+
+Run the local development server.
+
+`npm run dev`
+
 ### Back-end Structure
 
 For backend part we use Flask considering its lightweight and convinience.
@@ -125,4 +137,3 @@ For backend part we use Flask considering its lightweight and convinience.
     'userid': int
 }
 ```
-
