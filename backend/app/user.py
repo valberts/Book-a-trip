@@ -3,9 +3,10 @@
 
 from flask import Blueprint, jsonify
 import pymysql
+import os
 
 user = Blueprint('user', __name__)
-db = pymysql.connect(host='localhost', user='root', password='', db='SA')
+db = pymysql.connect(host='localhost', user=os.environ["MYSQL_USER"], password=os.environ["MYSQL_PWD"], db='SA')
 userTableCreateSql = '''
 CREATE TABLE IF NOT EXISTS UserInfo(
     id int(8) primary key auto_increment,
