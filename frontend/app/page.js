@@ -1,9 +1,13 @@
+import { redirect } from "next/navigation";
+
+// default path when going to the website, automatically redirects to login
+
 export default function Home() {
+    redirect("/login");
+
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-                Book a Trip
-            </div>
+        <main>
+            <div>OK</div>
         </main>
     );
 }
