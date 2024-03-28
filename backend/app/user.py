@@ -15,6 +15,45 @@ CREATE TABLE IF NOT EXISTS UserInfo(
 )
 '''
 
+userFlightCreateSql = '''
+CREATE TABLE IF NOT EXISTS FlightInfo(
+    id int(8) primary key auto_increment,
+    userid int(8),
+    airline VARCHAR(20),
+    departure_airport VARCHAR(20),
+    arrival_airport VARCHAR(20),
+    departure_date_time DATETIME,
+    arrival_date_time DATETIME,
+    price int(8)
+)
+'''
+
+userHotelCreateSql = '''
+CREATE TABLE IF NOT EXISTS FlightInfo(
+    id int(8) primary key auto_increment,
+    userid int(8),
+    hotelid int(8),
+    type VARCHAR(20),
+    price int(8),
+    startdate DATE,
+    enddate DATE,
+    capacity int(8),
+    amenities VARCHAR(20)
+)
+'''
+
+userTicketCreateSql = '''
+CREATE TABLE IF NOT EXISTS FlightInfo(
+    id int(8) primary key auto_increment,
+    userid int(8),
+    name VARCHAR(20),
+    type VARCHAR(20),
+    price int(8),
+    date DATE,
+    location VARCHAR(20)
+)
+'''
+
 @user.route('/userInfo/<username>')
 def searchUser(username):
     cursor = db.cursor()
