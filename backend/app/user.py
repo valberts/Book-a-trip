@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import pymysql
 import os
 
@@ -12,11 +12,12 @@ CREATE TABLE IF NOT EXISTS UserInfo(
     id int(8) primary key auto_increment,
     nickname VARCHAR(20),
     email VARCHAR(30) not null
+    pwd VARCHAR(30) not null
 )
 '''
 
 userFlightCreateSql = '''
-CREATE TABLE IF NOT EXISTS FlightInfo(
+CREATE TABLE IF NOT EXISTS userFlightInfo(
     id int(8) primary key auto_increment,
     userid int(8),
     airline VARCHAR(20),
@@ -29,10 +30,11 @@ CREATE TABLE IF NOT EXISTS FlightInfo(
 '''
 
 userHotelCreateSql = '''
-CREATE TABLE IF NOT EXISTS FlightInfo(
+CREATE TABLE IF NOT EXISTS userHotelInfo(
     id int(8) primary key auto_increment,
     userid int(8),
     hotelid int(8),
+    roomid int(8),
     type VARCHAR(20),
     price int(8),
     startdate DATE,
@@ -43,7 +45,7 @@ CREATE TABLE IF NOT EXISTS FlightInfo(
 '''
 
 userTicketCreateSql = '''
-CREATE TABLE IF NOT EXISTS FlightInfo(
+CREATE TABLE IF NOT EXISTS userTicketInfo(
     id int(8) primary key auto_increment,
     userid int(8),
     name VARCHAR(20),
@@ -56,6 +58,9 @@ CREATE TABLE IF NOT EXISTS FlightInfo(
 
 @user.route('/userInfo/<username>')
 def searchUser(username):
+    """
+    For user login and information retrival. Will return the encrypted passwd
+    """
     cursor = db.cursor()
     cursor.execute(userTableCreateSql)
     sql = "select * from UserInfo where nickname = '" + username +"'"
@@ -65,6 +70,25 @@ def searchUser(username):
 
     return jsonify(results)
 
+
+@user.route('/userInfo/<username>/<type>')
+def userPlan(type):
+    """
+    username: the name of the user
+    type: which info you want to retrive (hotel, ticket, flight)
+    """
+    cursor = db.cursor()
+    if type == "flight":
+        cursor.execute(userFlightCreateSql)
+        # sql = "select * from UserInfo where nickname = '" + username +"'"
+        pass
+    elif type == "ticket":
+        cursor.execute(userTicketCreateSql)
+        pass
+    elif type == "hotel":
+        cursor.execute(userHotelCreateSql)
+        pass
+    
 
 @user.route('/get/')
 def get_role():

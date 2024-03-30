@@ -1,7 +1,7 @@
 # !/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from flask import Blueprint
+from flask import Blueprint, request
 
 def register(app):
     # blueprint = Blueprint('user', __name__, static_folder='static', template_folder='templates')
