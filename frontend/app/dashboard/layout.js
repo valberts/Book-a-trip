@@ -1,7 +1,8 @@
-export default function Dashboard({ children }) {
+export default function Login({ children }) {
     return (
         <section>
             <nav></nav>
+
             {children}
         </section>
     );
