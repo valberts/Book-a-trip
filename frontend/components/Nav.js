@@ -1,33 +1,74 @@
-import Link from 'next/link';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../auth/authContext";
 
-export default function PlacesOfInterest() {
-    // This data array would normally come from an API or a database
-    const places = [
-        { id: 1, name: "Den haag", image: "/images/hotel-1.jpg", locality: "New York City, USA" },
-        { id: 2, name: "Rotterdam", image: "/images/hotel-2.jpg", locality: "Paris, France" },
-        { id: 3, name: "Amsterdam", image: "/images/hotel-3.jpg", locality: "Hong Kong" },
-        // Add more places as needed
-    ];
+export default function Nav() {
+    const router = useRouter();
+    const { isLoggedIn, login, logout } = useAuth();
+
+    // Function to handle logout
+    const handleLogout = () => {
+        // Call the logout function
+        logout();
+        // Redirect to home page
+        router.push("/");
+    };
+
+    // Function to handle login
+    const handleLogin = () => {
+        // Redirect to home page
+        router.push("/login");
+    };
 
     return (
-        <div className="container mx-auto px-4 py-12">
-            <h2 className="text-3xl font-bold text-center mb-8">Places of Interests</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {places.map((place) => (
-                    <div key={place.id} className="bg-white rounded-lg overflow-hidden shadow-lg">
-                        <img src={place.image} alt={place.name} className="w-full h-64 object-cover" />
-                        <div className="p-6">
-                            <h3 className="text-xl font-semibold mb-2">{place.name}</h3>
-                            <p className="text-gray-800">{place.locality}</p>
-                            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Locality
-                            </button>
-                        </div>
-                    </div>
-                ))}
+        <nav className="bg-white shadow-md py-4">
+            <div className="max-w-6xl mx-auto px-5 flex justify-between items-center">
+                <Link href="/">
+                    <span className="text-xl font-semibold">Book a Trip</span>
+                </Link>
+                <div className="hidden md:flex space-x-4">
+                    <nav className="flex items-center justify-between space-x-4">
+                        {isLoggedIn && (
+                            <Link
+                                href="/dashboard"
+                                className="hover:text-gray-500 duration-200 font-medium"
+                            >
+                                My Bookings
+                            </Link>
+                        )}
+                        {/* <a
+                            href="#"
+                            className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                        >
+                            Home
+                        </a>
+                        <a
+                            href="#"
+                            className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                        >
+                            Book
+                        </a>
+                        <a
+                            href="#"
+                            className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                        >
+                            Blog
+                        </a>
+                        <a
+                            href="#"
+                            className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                        >
+                            Contact Us
+                        </a> */}
+                        <button
+                            onClick={isLoggedIn ? handleLogout : handleLogin}
+                            className="text-blue-600 border border-blue-600 hover:bg-blue-600 hover:text-white transition-colors duration-200 font-bold py-2 px-4 rounded"
+                        >
+                            {isLoggedIn ? "Logout" : "Log in"}
+                        </button>
+                    </nav>
+                </div>
             </div>
-        </div>
+        </nav>
     );
 }
-
-
