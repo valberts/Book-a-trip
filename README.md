@@ -1,10 +1,12 @@
-# Team 25
+# Book a Trip - Team 25
 
-### Front-end Structure
+We propose a system which enables people to organise trips and travel within The Netherlands with lower barriers. Our goal is to centralise all the parts of booking a trip, including transportation, lodging, and tickets for points of interest.
+
+## Front-end Structure
 
 For the frontend we use Next.js and Tailwind CSS.
 
-## Running
+### Running
 
 ### Front End
 
@@ -34,11 +36,11 @@ Run the local development server.
 
 For backend part we use Flask considering its lightweight and convinience.
 
-### Database
+## Database
 
-#### Business DB
+### Business DB
 
-##### HotelTable
+#### HotelTable
 
 ```json
 {
@@ -53,7 +55,7 @@ For backend part we use Flask considering its lightweight and convinience.
 }
 ```
 
-##### RoomTable
+#### RoomTable
 
 ```
 {
@@ -68,7 +70,7 @@ For backend part we use Flask considering its lightweight and convinience.
 }
 ```
 
-##### TicketTable
+#### TicketTable
 
 ```
 {
@@ -82,7 +84,7 @@ For backend part we use Flask considering its lightweight and convinience.
 }
 ```
 
-##### FlightTable
+#### FlightTable
 
 ```json
 {
@@ -97,9 +99,9 @@ For backend part we use Flask considering its lightweight and convinience.
 }
 ```
 
-#### User DB
+### User DB
 
-##### UserInfo
+#### UserInfo
 
 ```
 {
@@ -109,7 +111,7 @@ For backend part we use Flask considering its lightweight and convinience.
 }
 ```
 
-##### FlightInfo
+#### FlightInfo
 
 ```
 {
@@ -124,7 +126,7 @@ For backend part we use Flask considering its lightweight and convinience.
 }
 ```
 
-##### HotelInfo
+#### HotelInfo
 
 ```
 {
@@ -140,7 +142,7 @@ For backend part we use Flask considering its lightweight and convinience.
 }
 ```
 
-##### TicketInfo
+#### TicketInfo
 
 ```
 {
