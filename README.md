@@ -6,7 +6,11 @@ We propose a system which enables people to organise trips and travel within The
 
 For the frontend we use Next.js and Tailwind CSS.
 
-### Running
+## Back-end Structure
+
+For backend part we use Flask considering its lightweight and convinience.
+
+## Running
 
 ### Front End
 
@@ -31,10 +35,6 @@ Run the local development server.
 - `cd /backend/app`
 
 - run `python/python3 app.py`
-
-### Back-end Structure
-
-For backend part we use Flask considering its lightweight and convinience.
 
 ## Database
 
