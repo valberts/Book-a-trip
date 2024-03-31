@@ -8,6 +8,8 @@ For the frontend we use Next.js and Tailwind CSS.
 
 ### Running
 
+### Front End
+
 Install the packages.
 
 `npm install`
@@ -16,7 +18,21 @@ Run the local development server.
 
 `npm run dev`
 
-## Back-end Structure
+### Back End
+
+- install the packages
+
+  `pip install -r requirements.txt`
+
+- install mysql
+
+- set `MYSQL_USER` and `MYSQL_PWD` in the environment
+
+- `cd /backend/app`
+
+- run `python/python3 app.py`
+
+### Back-end Structure
 
 For backend part we use Flask considering its lightweight and convinience.
 
