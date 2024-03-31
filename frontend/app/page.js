@@ -2,6 +2,7 @@
 import Locations from "../components/Locations";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import Link from "next/link";
 
 export default function Home() {
     // API URL from environment values or use default value
@@ -50,7 +51,8 @@ export default function Home() {
                                     placeholder="Guests"
                                     className="flex-grow px-6 py-3 text-lg"
                                 />
-                                <button
+                                <Link
+                                    href="/hotels"
                                     type="submit"
                                     className="px-4 flex items-center justify-center bg-blue-500 text-white"
                                 >
@@ -68,7 +70,7 @@ export default function Home() {
                                             d="M8 9l4-4 4 4m0 6l-4 4-4-4"
                                         ></path>
                                     </svg>
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </form>

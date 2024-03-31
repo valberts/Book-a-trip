@@ -47,10 +47,15 @@ export default function Locations() {
                             <h3 className="text-xl font-semibold mb-2">
                                 {place.name}
                             </h3>
-                            <p className="text-gray-800">{place.locality}</p>
-                            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <p className="text-gray-800 mb-4">
+                                {place.locality}
+                            </p>
+                            <Link
+                                href="/hotels"
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            >
                                 Explore
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 ))}

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 
-export default function Dashboard() {
+export default function Hotels() {
     // State management
     const router = useRouter();
 
@@ -21,7 +21,7 @@ export default function Dashboard() {
                 className="flex flex-1 relative bg-gray-100 items-center justify-center"
                 style={{ height: "85vh" }}
             >
-                Dashboard
+                List of hotels
             </div>
 
             <Footer />
