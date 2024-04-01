@@ -16,15 +16,12 @@ export default function Dashboard() {
 
     return (
         <main>
-            <Nav />
             <div
                 className="flex flex-1 relative bg-gray-100 items-center justify-center"
                 style={{ height: "85vh" }}
             >
-                Dashboard
+                My Bookings
             </div>
-
-            <Footer />
         </main>
     );
 }

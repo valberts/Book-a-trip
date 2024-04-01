@@ -40,7 +40,6 @@ export default function Login() {
 
     return (
         <main>
-            <Nav />
             <div
                 className="flex flex-1 relative bg-gray-100 items-center justify-center"
                 style={{ height: "85vh" }}
@@ -97,7 +96,6 @@ export default function Login() {
                     </form>
                 </div>
             </div>
-            <Footer />
         </main>
     );
 }

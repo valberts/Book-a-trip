@@ -1,8 +1,8 @@
 "use client";
 import Locations from "../components/Locations";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
+
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
     // API URL from environment values or use default value
@@ -13,12 +13,13 @@ export default function Home() {
 
     return (
         <main>
-            <Nav />
             <header className="relative bg-blue-500" style={{ height: "80vh" }}>
-                <img
-                    src="images/header.jpeg"
+                <Image
+                    src="/images/header.jpeg"
                     className="w-full h-auto object-cover object-center"
-                    alt="Tropical Resort"
+                    alt="Background"
+                    width={500}
+                    height={300}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50"></div>
                 <div className="absolute top-1/4 w-full text-center">
@@ -76,9 +77,8 @@ export default function Home() {
                     </form>
                 </div>
             </header>
-            <div className="flex flex-1 min-h-screen relative bg-gray-100 items-center justify-center">
+            <div className="flex flex-1 relative bg-gray-100 items-center justify-center">
                 <Locations />
-                <Footer />
             </div>
         </main>
     );

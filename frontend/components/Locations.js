@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Locations() {
     // This data array would normally come from an API or a database
@@ -38,10 +39,11 @@ export default function Locations() {
                         key={place.id}
                         className="bg-white rounded-lg overflow-hidden shadow-lg"
                     >
-                        <img
+                        <Image
                             src={place.image}
                             alt={place.name}
-                            className="w-full h-64 object-cover"
+                            width={500}
+                            height={300}
                         />
                         <div className="p-6">
                             <h3 className="text-xl font-semibold mb-2">
