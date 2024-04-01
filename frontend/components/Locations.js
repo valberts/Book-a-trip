@@ -23,7 +23,7 @@ export default function Locations() {
             name: "Amsterdam",
             image: "/images/location-3.jpeg",
             locality:
-                "Iconic canals, historic architecture, rich cultural scene, vibrant nightlife, diverse culinary landscape.",
+                "Iconic canals, capital city, historic architecture, rich cultural scene, vibrant nightlife, diverse culinary landscape.",
         },
         // Add more places as needed
     ];

@@ -14,6 +14,7 @@ export default function Dashboard() {
             ? "http://localhost:8088"
             : process.env.NEXT_PUBLIC_API_URL;
 
+    // Load users bookings here
     return (
         <main>
             <div

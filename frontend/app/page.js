@@ -16,10 +16,16 @@ export default function Home() {
             <header className="relative bg-blue-500" style={{ height: "80vh" }}>
                 <Image
                     src="/images/header.jpeg"
-                    className="w-full h-auto object-cover object-center"
                     alt="Background"
-                    width={500}
-                    height={300}
+                    className="object-cover object-center"
+                    width={2000}
+                    height={1000}
+                    priority={true}
+                    style={{
+                        width: "2000px", // Fixed width
+                        height: "1000px", // Fixed height
+                        objectFit: "cover",
+                    }}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50"></div>
                 <div className="absolute top-1/4 w-full text-center">
