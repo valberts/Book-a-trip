@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Locations() {
     // This data array would normally come from an API or a database
@@ -22,7 +23,7 @@ export default function Locations() {
             name: "Amsterdam",
             image: "/images/location-3.jpeg",
             locality:
-                "Iconic canals, historic architecture, rich cultural scene, vibrant nightlife, diverse culinary landscape.",
+                "Iconic canals, capital city, historic architecture, rich cultural scene, vibrant nightlife, diverse culinary landscape.",
         },
         // Add more places as needed
     ];
@@ -38,19 +39,25 @@ export default function Locations() {
                         key={place.id}
                         className="bg-white rounded-lg overflow-hidden shadow-lg"
                     >
-                        <img
+                        <Image
                             src={place.image}
                             alt={place.name}
-                            className="w-full h-64 object-cover"
+                            width={500}
+                            height={300}
                         />
                         <div className="p-6">
                             <h3 className="text-xl font-semibold mb-2">
                                 {place.name}
                             </h3>
-                            <p className="text-gray-800">{place.locality}</p>
-                            <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <p className="text-gray-800 mb-4">
+                                {place.locality}
+                            </p>
+                            <Link
+                                href="/hotels"
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            >
                                 Explore
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 ))}

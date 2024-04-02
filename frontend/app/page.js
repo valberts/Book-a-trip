@@ -1,7 +1,8 @@
 "use client";
 import Locations from "../components/Locations";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
+
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
     // API URL from environment values or use default value
@@ -12,12 +13,19 @@ export default function Home() {
 
     return (
         <main>
-            <Nav />
             <header className="relative bg-blue-500" style={{ height: "80vh" }}>
-                <img
-                    src="images/header.jpeg"
-                    className="w-full h-auto object-cover object-center"
-                    alt="Tropical Resort"
+                <Image
+                    src="/images/header.jpeg"
+                    alt="Background"
+                    className="object-cover object-center"
+                    width={2000}
+                    height={1000}
+                    priority={true}
+                    style={{
+                        width: "2000px", // Fixed width
+                        height: "1000px", // Fixed height
+                        objectFit: "cover",
+                    }}
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50"></div>
                 <div className="absolute top-1/4 w-full text-center">
@@ -50,7 +58,8 @@ export default function Home() {
                                     placeholder="Guests"
                                     className="flex-grow px-6 py-3 text-lg"
                                 />
-                                <button
+                                <Link
+                                    href="/hotels"
                                     type="submit"
                                     className="px-4 flex items-center justify-center bg-blue-500 text-white"
                                 >
@@ -68,15 +77,14 @@ export default function Home() {
                                             d="M8 9l4-4 4 4m0 6l-4 4-4-4"
                                         ></path>
                                     </svg>
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </form>
                 </div>
             </header>
-            <div className="flex flex-1 min-h-screen relative bg-gray-100 items-center justify-center">
+            <div className="flex flex-1 relative bg-gray-100 items-center justify-center">
                 <Locations />
-                <Footer />
             </div>
         </main>
     );

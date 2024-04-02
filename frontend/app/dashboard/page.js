@@ -4,7 +4,7 @@ import { useState } from "react";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 
-export default function Login() {
+export default function Dashboard() {
     // State management
     const router = useRouter();
 
@@ -14,17 +14,15 @@ export default function Login() {
             ? "http://localhost:8088"
             : process.env.NEXT_PUBLIC_API_URL;
 
+    // Load users bookings here
     return (
         <main>
-            <Nav />
             <div
                 className="flex flex-1 relative bg-gray-100 items-center justify-center"
                 style={{ height: "85vh" }}
             >
-                Dashboard
+                My Bookings
             </div>
-
-            <Footer />
         </main>
     );
 }
