@@ -71,23 +71,57 @@ def searchUser(username):
     return jsonify(results)
 
 
-@user.route('/userInfo/<username>/<type>')
-def userPlan(type):
+    # id int(8) primary key auto_increment,
+    # nickname VARCHAR(20),
+    # email VARCHAR(30) not null
+    # pwd VARCHAR(30) not null
+@user.route('/adduser', methods=['POST', 'GET'])
+def addUser():
+    cursor = db.cursor()
+    cursor.execute(userTableCreateSql)
+    nickname = request.form.get('nickname')
+    email = request.form.get('email')
+    pwd = request.form.get('pwd')
+    insertSql = "INSERT INTO UserInfo VALUES (NULL, '%s', '%s', '%s');" % (nickname, email, pwd)
+    # # try:
+    # cursor.execute(insertSql)
+    try:
+        cursor.execute(insertSql)
+    except e:
+        print(e)
+        return json.dumps({
+            'code': 100,
+            "msg": "fail"
+        })
+    return json.dumps({
+        'code': 200,
+        "msg": "success"
+    })
+
+
+@user.route('/userInfo', methods=['POST', 'GET'])
+def userPlan():
     """
     username: the name of the user
     type: which info you want to retrive (hotel, ticket, flight)
     """
+    userid = request.form.get('userid')
+    searchtype = request.form.get('searchtype')
     cursor = db.cursor()
-    if type == "flight":
-        cursor.execute(userFlightCreateSql)
-        # sql = "select * from UserInfo where nickname = '" + username +"'"
-        pass
-    elif type == "ticket":
-        cursor.execute(userTicketCreateSql)
-        pass
-    elif type == "hotel":
-        cursor.execute(userHotelCreateSql)
-        pass
+    # if type == "flight":
+    #     cursor.execute(userFlightCreateSql)
+    #     # sql = "select * from UserInfo where nickname = '" + username +"'"
+    #     pass
+    # elif type == "ticket":
+    #     cursor.execute(userTicketCreateSql)
+    #     pass
+    if searchtype == "hotel":
+        # cursor.execute(userHotelCreateSql)
+        sql = "select * from RoomBookingInfo where userid = '" + userid +"'"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        # pass
+        return json.dumps(results)
     
 
 @user.route('/get/')

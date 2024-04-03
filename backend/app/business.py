@@ -79,7 +79,7 @@ def searchHotel():
     sql = "select * from HotelInfo"
     cursor.execute(sql)
     results = cursor.fetchall()
-    return jsonify(results)
+    return json.dumps(results)
 
 
 # CREATE TABLE IF NOT EXISTS RoomBookingInfo(
@@ -104,10 +104,10 @@ def bookRoom():
     userid = request.form.get('userid')
     print(enddate)
     insertSql = "INSERT INTO RoomBookingInfo VALUES (NULL, '%s', '%s', '%s', '%s');" % (roomid, userid, startdate, enddate)
-    # try:
-    cursor.execute(insertSql)
+    # # try:
+    # cursor.execute(insertSql)
     try:
-        pass
+        cursor.execute(insertSql)
     except e:
         print(e)
         return json.dumps({
