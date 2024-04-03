@@ -25,12 +25,25 @@ CREATE TABLE IF NOT EXISTS RoomInfo(
     hotelid int(8),
     type VARCHAR(20),
     price int(8),
-    startdate DATE,
-    enddate DATE,
     capacity int(8),
     amenities VARCHAR(20)
 )
 '''
+
+roomBookingCreateSql = """
+CREATE TABLE IF NOT EXISTS RoomInfo(
+    id int(8) primary key auto_increment,
+    roomid int(8),
+    userid int(8),
+    hotelid int(8),
+    startdate DATE,
+    enddate DATE,
+    price int(8),
+    type VARCHAR(20),
+    capacity int(8),
+    amenities VARCHAR(20)
+)
+"""
 
 ticketCreateSql = '''
 CREATE TABLE IF NOT EXISTS TicketInfo(
@@ -66,6 +79,7 @@ def searchHotel():
     # print(username)
     # return username
     cursor = db.cursor()
+    cursor.execute(hotelCreateSql)
     sql = "select * from HotelInfo"
     cursor.execute(sql)
     results = cursor.fetchall()
@@ -87,20 +101,20 @@ def searchRoom():
     results = cursor.fetchall()
     return jsonify(results)
 
-@business.route('/ticket', methods=['POST', 'GET'])
-def searchTicket():
-    cursor = db.cursor()
-    sql = "select * from TicketInfo"
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    return jsonify(results)
+# @business.route('/ticket', methods=['POST', 'GET'])
+# def searchTicket():
+#     cursor = db.cursor()
+#     sql = "select * from TicketInfo"
+#     cursor.execute(sql)
+#     results = cursor.fetchall()
+#     return jsonify(results)
 
-@business.route('/flight', methods=['POST', 'GET'])
-def searchFlight():
-    cursor = db.cursor()
-    dport = request.form.get('departure_airport')
-    sport = request.form.get('arrival_airport')
-    sql = "select * from FlightInfo where departure_airport = " + dport + " AND arrival_airport = " + sport
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    return jsonify(results)
+# @business.route('/flight', methods=['POST', 'GET'])
+# def searchFlight():
+#     cursor = db.cursor()
+#     dport = request.form.get('departure_airport')
+#     sport = request.form.get('arrival_airport')
+#     sql = "select * from FlightInfo where departure_airport = " + dport + " AND arrival_airport = " + sport
+#     cursor.execute(sql)
+#     results = cursor.fetchall()
+#     return jsonify(results)
