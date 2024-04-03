@@ -1,6 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
+import { useAuth } from "../../auth/authContext";
 
 export default function Login() {
     // State management
@@ -8,6 +11,7 @@ export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState(""); // New state for error message
+    const { isLoggedIn, login, logout } = useAuth();
 
     // API URL from environment values or use default value
     const API_URL =
@@ -30,33 +34,17 @@ export default function Login() {
             password,
         };
 
-        router.push("/dashboard");
+        login();
+        router.push("/");
     }
-
-    // Footer component
-    const Footer = () => (
-        <footer className="text-center text-sm text-gray-500 py-4 absolute bottom-0 w-full">
-            © {new Date().getFullYear()} Book a Trip. All rights reserved.
-        </footer>
-    );
 
     return (
         <main>
-            <nav
-                className=" text-white p-3 w-full fixed top-0 left-0 z-50 "
-                style={{ boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}
+            <Nav />
+            <div
+                className="flex flex-1 relative bg-gray-100 items-center justify-center"
+                style={{ height: "85vh" }}
             >
-                <div className="container mx-auto flex justify-between items-center">
-                    <a href="http://localhost:3000/" rel="noopener noreferrer">
-                        <img
-                            src="/images/logo.png"
-                            alt="Logo"
-                            className="px-5 h-20 mr-10"
-                        />
-                    </a>
-                </div>
-            </nav>
-            <div className="flex flex-1 min-h-screen relative bg-gray-100 items-center justify-center">
                 <div className="flex flex-col bg-white shadow-lg py-16 px-32 items-center justify-center">
                     <h1 className="text-blue-600 text-4xl font-bold pb-4 select-none">
                         Book a Trip
@@ -102,9 +90,9 @@ export default function Login() {
                         )}
                         <button
                             type="submit"
-                            className="bg-blue-600 text-gray-100 rounded-lg w-[26ch] py-1.5 select-none hover:bg-blue-700 duration-300 mb-2"
+                            className="bg-blue-600 text-gray-100 rounded-lg w-[26ch] py-1.5 select-none hover:bg-blue-700 duration-200 mb-2"
                         >
-                            Sign In
+                            Log in
                         </button>
                     </form>
                 </div>
