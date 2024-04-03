@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import pymysql
 import os
+import json
 
 business = Blueprint('business', __name__)
 
@@ -96,15 +97,19 @@ def searchHotel():
 
 @business.route('/roombooking', methods=['POST', 'GET'])
 def bookRoom():
+    cursor = db.cursor()
     startdate = request.form.get('startdate')
     enddate = request.form.get('enddate')
     roomid = request.form.get('roomid')
     userid = request.form.get('userid')
     print(enddate)
     insertSql = "INSERT INTO RoomBookingInfo VALUES (NULL, '%s', '%s', '%s', '%s');" % (roomid, userid, startdate, enddate)
+    # try:
+    cursor.execute(insertSql)
     try:
-        cursor.execute(insertSql)
-    except:
+        pass
+    except e:
+        print(e)
         return json.dumps({
             'code': 100,
             "msg": "fail"
@@ -124,7 +129,7 @@ def searchRoom():
     searchSql = """
     SELECT * FROM RoomInfo r WHERE NOT EXISTS ( SELECT 1
     FROM RoomBookingInfo b
-    WHERE r.roomid = b.roomid
+    WHERE r.id = b.roomid
     AND (
         (b.startdate >= 'START_PLACEHOLDER' AND b.startdate <= 'END_PLACEHOLDER')
         OR (b.enddate >= 'START_PLACEHOLDER' AND b.enddate <= 'END_PLACEHOLDER')
