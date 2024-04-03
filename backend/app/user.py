@@ -4,6 +4,7 @@
 from flask import Blueprint, jsonify, request
 import pymysql
 import os
+import json
 
 user = Blueprint('user', __name__)
 db = pymysql.connect(host='localhost', user=os.environ["MYSQL_USER"], password=os.environ["MYSQL_PWD"], db='SA')
@@ -11,7 +12,7 @@ userTableCreateSql = '''
 CREATE TABLE IF NOT EXISTS UserInfo(
     id int(8) primary key auto_increment,
     nickname VARCHAR(20),
-    email VARCHAR(30) not null
+    email VARCHAR(30) not null,
     pwd VARCHAR(30) not null
 )
 '''
@@ -56,14 +57,14 @@ CREATE TABLE IF NOT EXISTS userTicketInfo(
 )
 '''
 
-@user.route('/userInfo/<username>')
+@user.route('/userInfo/<username>', methods=['POST', 'GET'])
 def searchUser(username):
     """
     For user login and information retrival. Will return the encrypted passwd
     """
     cursor = db.cursor()
     cursor.execute(userTableCreateSql)
-    sql = "select * from UserInfo where nickname = '" + username +"'"
+    sql = "select * from UserInfo where nickname = '" + username +"';"
     cursor.execute(sql)
     results = cursor.fetchall()
     print(results)
@@ -85,6 +86,7 @@ def addUser():
     insertSql = "INSERT INTO UserInfo VALUES (NULL, '%s', '%s', '%s');" % (nickname, email, pwd)
     # # try:
     # cursor.execute(insertSql)
+    print(insertSql)
     try:
         cursor.execute(insertSql)
     except e:
@@ -99,7 +101,7 @@ def addUser():
     })
 
 
-@user.route('/userInfo', methods=['POST', 'GET'])
+@user.route('/userBooking', methods=['POST', 'GET'])
 def userPlan():
     """
     username: the name of the user
@@ -117,11 +119,12 @@ def userPlan():
     #     pass
     if searchtype == "hotel":
         # cursor.execute(userHotelCreateSql)
-        sql = "select * from RoomBookingInfo where userid = '" + userid +"'"
+        sql = "select * from RoomBookingInfo where userid =" + userid +";"
         cursor.execute(sql)
         results = cursor.fetchall()
         # pass
-        return json.dumps(results)
+        print(results)
+        return jsonify(results)
     
 
 @user.route('/get/')
