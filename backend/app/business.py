@@ -85,20 +85,42 @@ def searchHotel():
     results = cursor.fetchall()
     return jsonify(results)
 
+@business.route('/roombooking', methods=['POST', 'GET'])
+def bookRoom():
+    startdate = request.form.get('startdate')
+    enddate = request.form.get('enddate')
+    print(enddate)
+    return startdate
+
 @business.route('/room', methods=['POST', 'GET'])
 def searchRoom():
     cursor = db.cursor()
+    cursor.execute(roomCreateSql)
+    cursor.execute(roomBookingCreateSql)
     startdate = request.form.get('startdate')
     enddate = request.form.get('enddate')
+    searchSql = """
+    SELECT * FROM RoomInfo r WHERE NOT EXISTS ( SELECT 1
+    FROM RoomBookingInfo b
+    WHERE r.roomid = b.roomid
+    AND (
+        (b.startdate >= 'START_PLACEHOLDER' AND b.startdate <= 'END_PLACEHOLDER')
+        OR (b.enddate >= 'START_PLACEHOLDER' AND b.enddate <= 'END_PLACEHOLDER')
+        OR (b.startdate <= 'START_PLACEHOLDER' AND b.enddate >= 'END_PLACEHOLDER')
+    )
+    )"""
+    searchSql = searchSql.replace("START_PLACEHOLDER", startdate).replace('END_PLACEHOLDER', enddate)
+
     try:
         capacity = request.form.get('capacity')
         hotelid = request.form.get('hotelid')
     except:
         capacity = 0
         hotelid = -1
-    sql = "select * from RoomInfo where startdate < " + startdate + " AND enddate > " + enddate + " AND capacity > " + capacity
-    cursor.execute(sql)
+    # sql = "select * from RoomInfo where startdate < " + startdate + " AND enddate > " + enddate + " AND capacity > " + capacity
+    cursor.execute(searchSql)
     results = cursor.fetchall()
+    print(results)
     return jsonify(results)
 
 # @business.route('/ticket', methods=['POST', 'GET'])
