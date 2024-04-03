@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS RoomInfo(
 '''
 
 roomBookingCreateSql = """
-CREATE TABLE IF NOT EXISTS RoomInfo(
+CREATE TABLE IF NOT EXISTS RoomBookingInfo(
     id int(8) primary key auto_increment,
     roomid int(8),
     userid int(8),
@@ -92,7 +92,7 @@ def searchRoom():
     enddate = request.form.get('enddate')
     try:
         capacity = request.form.get('capacity')
-        hotelid = request.from.get('hotelid')
+        hotelid = request.form.get('hotelid')
     except:
         capacity = 0
         hotelid = -1
