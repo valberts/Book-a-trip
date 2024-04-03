@@ -148,7 +148,7 @@ def searchRoom():
     cursor.execute(searchSql)
     results = cursor.fetchall()
     print(results)
-    return jsonify(results)
+    return json.dumps(results)
 
 # @business.route('/ticket', methods=['POST', 'GET'])
 # def searchTicket():
