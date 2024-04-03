@@ -35,13 +35,8 @@ CREATE TABLE IF NOT EXISTS RoomBookingInfo(
     id int(8) primary key auto_increment,
     roomid int(8),
     userid int(8),
-    hotelid int(8),
     startdate DATE,
-    enddate DATE,
-    price int(8),
-    type VARCHAR(20),
-    capacity int(8),
-    amenities VARCHAR(20)
+    enddate DATE
 )
 """
 
@@ -85,12 +80,39 @@ def searchHotel():
     results = cursor.fetchall()
     return jsonify(results)
 
+
+# CREATE TABLE IF NOT EXISTS RoomBookingInfo(
+#     id int(8) primary key auto_increment,
+#     roomid int(8),
+#     userid int(8),
+#     hotelid int(8),
+#     startdate DATE,
+#     enddate DATE,
+#     price int(8),
+#     type VARCHAR(20),
+#     capacity int(8),
+#     amenities VARCHAR(20)
+# )
+
 @business.route('/roombooking', methods=['POST', 'GET'])
 def bookRoom():
     startdate = request.form.get('startdate')
     enddate = request.form.get('enddate')
+    roomid = request.form.get('roomid')
+    userid = request.form.get('userid')
     print(enddate)
-    return startdate
+    insertSql = "INSERT INTO RoomBookingInfo VALUES (NULL, '%s', '%s', '%s', '%s');" % (roomid, userid, startdate, enddate)
+    try:
+        cursor.execute(insertSql)
+    except:
+        return json.dumps({
+            'code': 100,
+            "msg": "fail"
+        })
+    return json.dumps({
+        'code': 200,
+        "msg": "success"
+    })
 
 @business.route('/room', methods=['POST', 'GET'])
 def searchRoom():
