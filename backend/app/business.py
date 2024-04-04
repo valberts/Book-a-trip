@@ -160,6 +160,38 @@ def bookRoom():
     return jsonify({"code": 200, "msg": "Booking successful"}), 200
 
 
+@business.route("/cancelbooking", methods=["DELETE"])
+def cancelBooking():
+    cursor = db.cursor()
+
+    # Parse JSON data from the request
+    data = request.json
+    bookingId = data.get("bookingId")
+
+    # Ensure bookingId is provided
+    if not bookingId:
+        return jsonify({"code": 400, "msg": "Booking ID is required"}), 400
+
+    # Define SQL query to check if the booking exists
+    checkSql = "SELECT * FROM RoomBookingInfo WHERE id = %s;"
+    cursor.execute(checkSql, (bookingId,))
+
+    # Ensure the booking exists before attempting to delete
+    if cursor.fetchone() is None:
+        return jsonify({"code": 404, "msg": "Booking not found"}), 404
+
+    # Define SQL query for deletion
+    deleteSql = "DELETE FROM RoomBookingInfo WHERE id = %s;"
+
+    # Execute the query with safe parameter substitution
+    cursor.execute(deleteSql, (bookingId,))
+
+    # Commit the transaction
+    db.commit()
+
+    return jsonify({"code": 200, "msg": "Booking cancelled successfully"}), 200
+
+
 @business.route("/getbookings", methods=["POST"])
 def getUserBookings():
     cursor = db.cursor()

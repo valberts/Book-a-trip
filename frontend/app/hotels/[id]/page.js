@@ -13,6 +13,7 @@ export default function HotelPage() {
     //State management
     const { isLoggedIn, email, login, logout } = useAuth();
     const [errorMessage, setErrorMessage] = useState(""); // State for error message
+    const [successMessage, setSuccessMessage] = useState(""); // State for success message
     const [startDate, setStartDate] = useState(today); //For date selection, defaults to today
     const [guests, setGuests] = useState(1); // Default to 1 guest
     const [nights, setNights] = useState(1); // Default to 1 night
@@ -91,6 +92,7 @@ export default function HotelPage() {
             if (response.ok) {
                 // Handle successful booking here
                 console.log("Booking successful:", responseData);
+                setSuccessMessage("Your booking has been successfully placed!");
                 // Optionally, redirect the user to a confirmation page or display a success message
             } else {
                 // Handle errors or unsuccessful booking attempts here
@@ -146,6 +148,12 @@ export default function HotelPage() {
                                 </h3>
                                 <Rating rating={hotel.rating} />
                             </div>
+                            <p className="text-gray-800 mb-2 text-sm">
+                                {hotel.city + ", " + hotel.address}
+                            </p>
+                            <p className="text-gray-800 mb-2 text-sm">
+                                {hotel.contact}
+                            </p>
                             <p className="mt-4 text-gray-600">
                                 {hotel.description}
                             </p>
@@ -246,6 +254,11 @@ export default function HotelPage() {
                                 {errorMessage && ( // Conditionally render error message
                                     <div className="text-red-500">
                                         {errorMessage}
+                                    </div>
+                                )}
+                                {successMessage && ( // Conditionally render success message
+                                    <div className="mt-2 text-green-600">
+                                        {successMessage}
                                     </div>
                                 )}
                             </div>
