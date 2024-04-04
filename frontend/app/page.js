@@ -5,12 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Home() {
-    // API URL from environment values or use default value
-    const API_URL =
-        process.env.NEXT_PUBLIC_API_URL === undefined
-            ? "http://localhost:8088"
-            : process.env.NEXT_PUBLIC_API_URL;
-
     return (
         <main>
             <header className="relative bg-blue-500" style={{ height: "80vh" }}>

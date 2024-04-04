@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 import pymysql
 import os
 import json
+from datetime import datetime, timedelta
+
 
 business = Blueprint("business", __name__)
 
@@ -49,11 +51,13 @@ CREATE TABLE IF NOT EXISTS RoomInfo(
 
 roomBookingCreateSql = """
 CREATE TABLE IF NOT EXISTS RoomBookingInfo(
-    id int(8) primary key auto_increment,
-    roomid int(8),
-    userid int(8),
-    startdate DATE,
-    enddate DATE
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    hotelId INT NOT NULL,
+    startDate DATE NOT NULL,
+    nights INT NOT NULL,
+    guests INT NOT NULL,
+    totalPrice INT NOT NULL,
+    email VARCHAR(30) NOT NULL
 )
 """
 
@@ -125,28 +129,113 @@ def searchHotel():
 # )
 
 
-@business.route("/roombooking", methods=["POST", "GET"])
+@business.route("/bookroom", methods=["POST"])
 def bookRoom():
     cursor = db.cursor()
-    startdate = request.form.get("startdate")
-    enddate = request.form.get("enddate")
-    roomid = request.form.get("roomid")
-    userid = request.form.get("userid")
-    print(enddate)
-    insertSql = "INSERT INTO RoomBookingInfo VALUES (NULL, '%s', '%s', '%s', '%s');" % (
-        roomid,
-        userid,
-        startdate,
-        enddate,
+
+    cursor.execute(roomBookingCreateSql)
+
+    # Parse JSON data from the request
+    data = request.json
+    hotelId = data.get("hotelId")
+    startDate = data.get("startDate")
+    nights = int(data.get("nights"))
+    guests = int(data.get("guests"))
+    totalPrice = int(data.get("totalPrice"))
+    email = data.get("email")
+
+    # Define SQL query with placeholders
+    insertSql = (
+        "INSERT INTO RoomBookingInfo "
+        "(hotelId, startDate, nights, guests, totalPrice, email) "
+        "VALUES (%s, %s, %s, %s, %s, %s);"
     )
-    # # try:
-    # cursor.execute(insertSql)
-    try:
-        cursor.execute(insertSql)
-    except e:
-        print(e)
-        return json.dumps({"code": 100, "msg": "fail"})
-    return json.dumps({"code": 200, "msg": "success"})
+
+    # Execute the query with safe parameter substitution
+    cursor.execute(insertSql, (hotelId, startDate, nights, guests, totalPrice, email))
+
+    # Commit the transaction
+    db.commit()
+
+    return jsonify({"code": 200, "msg": "Booking successful"}), 200
+
+
+@business.route("/getbookings", methods=["POST"])
+def getUserBookings():
+    cursor = db.cursor()
+    cursor.execute(roomBookingCreateSql)
+
+    # Extract email from JSON request
+    request_data = request.get_json()
+
+    if request_data is not None:
+        email = request_data.get("email", "")
+    else:
+        # Handle the case when request_data is None
+        email = ""
+
+    # Define SQL query to fetch bookings by email
+    querySql = "SELECT * FROM RoomBookingInfo WHERE email = %s;"
+
+    # Execute the query
+    cursor.execute(querySql, (email,))
+
+    # Fetch all bookings
+    results = cursor.fetchall()
+
+    # Fetch column names from cursor description
+    columns = [column[0] for column in cursor.description]
+
+    # Convert to proper JSON format
+    bookings = []
+    for result in results:
+        booking = {}
+        for i, column in enumerate(columns):
+            if column == "startDate":  # Convert startDate to string representation
+                booking[column] = result[i].strftime("%Y-%m-%d")
+            else:
+                booking[column] = result[i]
+        bookings.append(booking)
+    return (
+        json.dumps(bookings),
+        200,
+        {"ContentType": "application/json"},
+    )
+
+
+@business.route("/getallbookings", methods=["GET"])
+def getAllBookings():
+    cursor = db.cursor()
+    cursor.execute(roomBookingCreateSql)
+
+    # Define SQL query to fetch all bookings
+    querySql = "SELECT * FROM RoomBookingInfo;"
+
+    # Execute the query
+    cursor.execute(querySql)
+
+    # Fetch all bookings
+    results = cursor.fetchall()
+
+    # Fetch column names from cursor description
+    columns = [column[0] for column in cursor.description]
+
+    # Convert to proper JSON format
+    bookings = []
+    for result in results:
+        booking = {}
+        for i, column in enumerate(columns):
+            if column == "startDate":  # Convert startDate to string representation
+                booking[column] = result[i].strftime("%Y-%m-%d")
+            else:
+                booking[column] = result[i]
+        bookings.append(booking)
+
+    return (
+        json.dumps(bookings),
+        200,
+        {"ContentType": "application/json"},
+    )
 
 
 @business.route("/room", methods=["POST", "GET"])
