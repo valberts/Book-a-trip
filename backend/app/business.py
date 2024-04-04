@@ -3,11 +3,13 @@ import pymysql
 import os
 import json
 
-business = Blueprint('business', __name__)
+business = Blueprint("business", __name__)
 
-db = pymysql.connect(host='localhost', user=os.environ["MYSQL_USER"], password=os.environ["MYSQL_PWD"], db='SA')
+db = pymysql.connect(
+    host="db", user=os.environ["MYSQL_USER"], password=os.environ["MYSQL_PWD"], db="SA"
+)
 
-hotelCreateSql = '''
+hotelCreateSql = """
 CREATE TABLE IF NOT EXISTS HotelInfo(
     id int(8) primary key auto_increment,
     name VARCHAR(20),
@@ -18,9 +20,9 @@ CREATE TABLE IF NOT EXISTS HotelInfo(
     contact VARCHAR(20),
     amenities VARCHAR(20)
 )
-'''
+"""
 
-roomCreateSql = '''
+roomCreateSql = """
 CREATE TABLE IF NOT EXISTS RoomInfo(
     id int(8) primary key auto_increment,
     hotelid int(8),
@@ -29,7 +31,7 @@ CREATE TABLE IF NOT EXISTS RoomInfo(
     capacity int(8),
     amenities VARCHAR(20)
 )
-'''
+"""
 
 roomBookingCreateSql = """
 CREATE TABLE IF NOT EXISTS RoomBookingInfo(
@@ -41,7 +43,7 @@ CREATE TABLE IF NOT EXISTS RoomBookingInfo(
 )
 """
 
-ticketCreateSql = '''
+ticketCreateSql = """
 CREATE TABLE IF NOT EXISTS TicketInfo(
     id int(8) primary key auto_increment,
     name VARCHAR(20),
@@ -51,10 +53,10 @@ CREATE TABLE IF NOT EXISTS TicketInfo(
     location VARCHAR(20),
     availability int(8)
 )
-'''
+"""
 
 
-flightCreateSql = '''
+flightCreateSql = """
 CREATE TABLE IF NOT EXISTS FlightInfo(
     id int(8) primary key auto_increment,
     airline VARCHAR(20),
@@ -65,10 +67,10 @@ CREATE TABLE IF NOT EXISTS FlightInfo(
     price int(8),
     availability int(8)
 )
-'''
+"""
 
 
-@business.route('/hotel', methods=['POST', 'GET'])
+@business.route("/hotel", methods=["POST", "GET"])
 def searchHotel():
     # print(request)
     # username = request.form.get('username')
@@ -95,37 +97,38 @@ def searchHotel():
 #     amenities VARCHAR(20)
 # )
 
-@business.route('/roombooking', methods=['POST', 'GET'])
+
+@business.route("/roombooking", methods=["POST", "GET"])
 def bookRoom():
     cursor = db.cursor()
-    startdate = request.form.get('startdate')
-    enddate = request.form.get('enddate')
-    roomid = request.form.get('roomid')
-    userid = request.form.get('userid')
+    startdate = request.form.get("startdate")
+    enddate = request.form.get("enddate")
+    roomid = request.form.get("roomid")
+    userid = request.form.get("userid")
     print(enddate)
-    insertSql = "INSERT INTO RoomBookingInfo VALUES (NULL, '%s', '%s', '%s', '%s');" % (roomid, userid, startdate, enddate)
+    insertSql = "INSERT INTO RoomBookingInfo VALUES (NULL, '%s', '%s', '%s', '%s');" % (
+        roomid,
+        userid,
+        startdate,
+        enddate,
+    )
     # # try:
     # cursor.execute(insertSql)
     try:
         cursor.execute(insertSql)
     except e:
         print(e)
-        return json.dumps({
-            'code': 100,
-            "msg": "fail"
-        })
-    return json.dumps({
-        'code': 200,
-        "msg": "success"
-    })
+        return json.dumps({"code": 100, "msg": "fail"})
+    return json.dumps({"code": 200, "msg": "success"})
 
-@business.route('/room', methods=['POST', 'GET'])
+
+@business.route("/room", methods=["POST", "GET"])
 def searchRoom():
     cursor = db.cursor()
     cursor.execute(roomCreateSql)
     cursor.execute(roomBookingCreateSql)
-    startdate = request.form.get('startdate')
-    enddate = request.form.get('enddate')
+    startdate = request.form.get("startdate")
+    enddate = request.form.get("enddate")
     searchSql = """
     SELECT * FROM RoomInfo r WHERE NOT EXISTS ( SELECT 1
     FROM RoomBookingInfo b
@@ -136,11 +139,13 @@ def searchRoom():
         OR (b.startdate <= 'START_PLACEHOLDER' AND b.enddate >= 'END_PLACEHOLDER')
     )
     )"""
-    searchSql = searchSql.replace("START_PLACEHOLDER", startdate).replace('END_PLACEHOLDER', enddate)
+    searchSql = searchSql.replace("START_PLACEHOLDER", startdate).replace(
+        "END_PLACEHOLDER", enddate
+    )
 
     try:
-        capacity = request.form.get('capacity')
-        hotelid = request.form.get('hotelid')
+        capacity = request.form.get("capacity")
+        hotelid = request.form.get("hotelid")
     except:
         capacity = 0
         hotelid = -1
@@ -149,6 +154,7 @@ def searchRoom():
     results = cursor.fetchall()
     print(results)
     return json.dumps(results)
+
 
 # @business.route('/ticket', methods=['POST', 'GET'])
 # def searchTicket():

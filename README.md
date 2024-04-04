@@ -24,17 +24,25 @@ Run the local development server.
 
 ### Back End
 
-- install the packages
+#### Running with Docker
 
-  `pip install -r requirements.txt`
+`cd backend`
 
-- install mysql
+`docker-compose up --build`
 
-- set `MYSQL_USER` and `MYSQL_PWD` in the environment
+#### Running manually
 
-- `cd /backend/app`
+-   install the packages
 
-- run `python/python3 app.py`
+    `pip install -r requirements.txt`
+
+-   install mysql
+
+-   set `MYSQL_USER` and `MYSQL_PWD` in the environment
+
+-   `cd /backend/app`
+
+-   run `python/python3 app.py`
 
 ## Database
 

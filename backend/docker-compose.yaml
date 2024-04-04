@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+    environment:
+      MYSQL_USER: user
+      MYSQL_PWD: password
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: SA
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306" 
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
