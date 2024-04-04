@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import { useAuth } from "../../auth/authContext";
@@ -8,34 +8,55 @@ import { useAuth } from "../../auth/authContext";
 export default function Login() {
     // State management
     const router = useRouter();
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState(""); // New state for error message
     const { isLoggedIn, login, logout } = useAuth();
 
     // API URL from environment values or use default value
-    const API_URL =
-        process.env.NEXT_PUBLIC_API_URL === undefined
-            ? "http://localhost:8088"
-            : process.env.NEXT_PUBLIC_API_URL;
+    const API_URL = process.env.API_URL || "http://localhost:8888";
 
     // Function to handle login
     async function handleLogin(event) {
         event.preventDefault();
         setErrorMessage("");
 
-        if (!username.trim() || !password.trim()) {
+        if (!email.trim() || !password.trim()) {
             setErrorMessage("Please fill in all fields.");
             return;
         }
 
         const loginDetails = {
-            username,
+            email,
             password,
         };
 
-        login();
-        router.push("/");
+        try {
+            const response = await fetch(`${API_URL}/user/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loginDetails),
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.json();
+                setErrorMessage(errorMessage.msg || "User not found.");
+                return;
+            }
+
+            const data = await response.json();
+            if (data.code === 200) {
+                login(email);
+                router.push("/");
+            } else {
+                setErrorMessage(data.msg || "Invalid email or password.");
+            }
+        } catch (error) {
+            console.error("Failed to login:", error);
+            setErrorMessage("Failed to login. Please try again later.");
+        }
     }
 
     return (
@@ -54,17 +75,16 @@ export default function Login() {
                     >
                         <input
                             type="text"
-                            autoComplete="username"
-                            placeholder="Username"
+                            autoComplete="email"
+                            placeholder="Email"
                             className={`outline-none duration-300 border-solid border-2 ${
                                 errorMessage
                                     ? "border-red-500"
                                     : "border-gray-200"
                             } p-2 w-full max-w-[30ch] rounded-lg bg-white mb-4`} // Change border color on error
-                            value={username}
+                            value={email}
                             onChange={(e) => {
-                                setUsername(e.target.value),
-                                    setErrorMessage("");
+                                setEmail(e.target.value), setErrorMessage("");
                             }}
                         />
                         <input

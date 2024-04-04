@@ -13,11 +13,27 @@ db = pymysql.connect(
 userTableCreateSql = """
 CREATE TABLE IF NOT EXISTS UserInfo(
     id int(8) primary key auto_increment,
-    nickname VARCHAR(20),
-    email VARCHAR(30) not null,
+    email VARCHAR(30) not null unique,
     pwd VARCHAR(30) not null
 )
 """
+
+
+insertUserSql1 = """
+INSERT INTO UserInfo (email, pwd) 
+SELECT * FROM (SELECT 'tomcruise@gmail.com', 'password') AS tmp 
+WHERE NOT EXISTS (
+    SELECT email FROM UserInfo WHERE email = 'tomcruise@gmail.com'
+) LIMIT 1;
+"""
+insertUserSql2 = """
+INSERT INTO UserInfo (email, pwd) 
+SELECT * FROM (SELECT 'willsmith@gmail.com', 'password') AS tmp 
+WHERE NOT EXISTS (
+    SELECT email FROM UserInfo WHERE email = 'willsmith@gmail.com'
+) LIMIT 1;
+"""
+
 
 userFlightCreateSql = """
 CREATE TABLE IF NOT EXISTS userFlightInfo(
@@ -60,47 +76,73 @@ CREATE TABLE IF NOT EXISTS userTicketInfo(
 """
 
 
-@user.route("/userInfo/<username>", methods=["POST", "GET"])
-def searchUser(username):
+@user.route("/login", methods=["POST"])
+def login():
+    login_data = request.json
+    email = login_data.get("email")
+    password = login_data.get("password")
+
+    cursor = db.cursor()
+    cursor.execute(userTableCreateSql)
+    # Check if there are any rows returned
+    if cursor.rowcount == 0:
+        cursor.execute(insertUserSql1)  # Insert the user data
+        cursor.execute(insertUserSql2)
+
+    cursor.execute("SELECT * FROM UserInfo WHERE email = %s;", (email,))
+    user = cursor.fetchone()
+
+    if user:
+        # User found, check password
+        if (
+            password == user[2]
+        ):  # Assuming password is stored in the third column (change accordingly)
+            return jsonify({"code": 200, "msg": "Login successful"})
+        else:
+            return jsonify({"code": 401, "msg": "Invalid credentials"})
+    else:
+        return jsonify({"code": 404, "msg": "User not found"})
+
+
+@user.route("/userInfo", methods=["GET"])
+def getUserInfo():
     """
-    For user login and information retrival. Will return the encrypted passwd
+    Get all users' information, for debugging purposes
     """
     cursor = db.cursor()
     cursor.execute(userTableCreateSql)
-    sql = "select * from UserInfo where nickname = '" + username + "';"
+
+    if cursor.rowcount == 0:
+        cursor.execute(insertUserSql1)  # Insert the user data
+        cursor.execute(insertUserSql2)
+
+    sql = "SELECT * FROM UserInfo;"
     cursor.execute(sql)
-    results = cursor.fetchall()
-    print(results)
+    result = cursor.fetchall()  # Fetch all rows
+    print(result)
 
-    return jsonify(results)
-
-    # id int(8) primary key auto_increment,
-    # nickname VARCHAR(20),
-    # email VARCHAR(30) not null
-    # pwd VARCHAR(30) not null
+    if result:
+        return jsonify(result)
+    else:
+        return jsonify({"error": "No users found"})
 
 
 @user.route("/adduser", methods=["POST", "GET"])
 def addUser():
     cursor = db.cursor()
     cursor.execute(userTableCreateSql)
-    nickname = request.form.get("nickname")
     email = request.form.get("email")
     pwd = request.form.get("pwd")
-    insertSql = "INSERT INTO UserInfo VALUES (NULL, '%s', '%s', '%s');" % (
-        nickname,
-        email,
-        pwd,
-    )
-    # # try:
-    # cursor.execute(insertSql)
-    print(insertSql)
+    insertSql = "INSERT INTO UserInfo (email, pwd) VALUES (%s, %s);"
     try:
-        cursor.execute(insertSql)
-    except e:
+        cursor.execute(insertSql, (email, pwd))
+        db.commit()
+        return json.dumps({"code": 200, "msg": "success"})
+    except pymysql.IntegrityError as e:
         print(e)
-        return json.dumps({"code": 100, "msg": "fail"})
-    return json.dumps({"code": 200, "msg": "success"})
+        return json.dumps({"code": 100, "msg": "Email already exists"})
+    finally:
+        cursor.close()
 
 
 @user.route("/userBooking", methods=["POST", "GET"])
