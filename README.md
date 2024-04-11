@@ -1,6 +1,8 @@
-# Book a Trip - Team 25
+# Book a Trip
 
 We propose a system which enables people to organise trips and travel within The Netherlands with lower barriers. Our goal is to centralise all the parts of booking a trip, including transportation, lodging, and tickets for points of interest.
+
+![Diffuse rendering of mesh](screenshot.jpg)
 
 ## Running
 
